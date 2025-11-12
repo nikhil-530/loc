@@ -1,39 +1,28 @@
 1111111111111111111
-void main() {
-  // Variables and Data Types
-  int age = 20;
-  double height = 5.8;
-  String name = "Nikhil";
-  bool isStudent = true;
+void main(){
+    int a =10;
+    String knxos ="jbbs";
 
-  // Printing values
-  print("Name: $name");
-  print("Age: $age");
-  print("Height: $height");
-  print("Is Student: $isStudent");
+    print("Hello $knxos");
+    for(int i=0;i< 5;i++){
+        print("hi");
+    }
+    int b = add(2,3);
+    print("$b");
+    Animal myanimal = Animal("Puppy");
+    myanimal.hello();
 
-  // Conditional statement
-  if (age >= 18) {
-    print("You are an adult.");
-  } else {
-    print("You are a minor.");
-  }
-
-  // Loop example
-  print("Counting from 1 to 5:");
-  for (int i = 1; i <= 5; i++) {
-    print(i);
-  }
-
-  // Function call
-  greetUser(name);
 }
-
-// Simple function
-void greetUser(String userName) {
-  print("Hello, $userName! Welcome to Dart programming.");
+int add(int a, int b){
+    return a + b ;
 }
-
+class Animal {
+    String name;
+    Animal(this.name);
+    hello(){
+        print("Hello $name");
+    }
+}
 
 
 
@@ -248,18 +237,7 @@ class SecondScreen extends StatelessWidget {
 555555555555
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: CounterApp(),
-    );
-  }
-}
+void main() => runApp(MaterialApp(home: CounterApp()));
 
 class CounterApp extends StatefulWidget {
   @override
@@ -267,24 +245,19 @@ class CounterApp extends StatefulWidget {
 }
 
 class _CounterAppState extends State<CounterApp> {
-  int count = 0; // state variable
+  int count = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Stateful Widget Example')),
+      appBar: AppBar(title: Text('Counter App')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Count: $count', style: TextStyle(fontSize: 24)),
-            SizedBox(height: 20),
+            Text('Count: $count', style: TextStyle(fontSize: 25)),
             ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  count++; // state changes here
-                });
-              },
+              onPressed: () => setState(() => count++),
               child: Text('Increment'),
             ),
           ],
@@ -293,525 +266,257 @@ class _CounterAppState extends State<CounterApp> {
     );
   }
 }
+555555555555555
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+void main() => runApp(
+  ChangeNotifierProvider(
+    create: (_) => Counter(),
+    child: MaterialApp(home: MyApp()),
+  ),
+);
+
+class Counter extends ChangeNotifier {
+  int n = 0;
+  void add() { n++; notifyListeners(); }
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final c = Provider.of<Counter>(context);
+    return Scaffold(
+      appBar: AppBar(title: Text('Provider Demo')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Count: ${c.n}', style: TextStyle(fontSize: 24)),
+            ElevatedButton(onPressed: c.add, child: Text('Add')),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
 6666666666666666
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
+void main() => runApp(MyApp());
+
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
 }
 
-class MyApp extends StatelessWidget {
+class _MyAppState extends State<MyApp> {
+  bool isDark = false;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Custom Widgets & Themes',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        textTheme: TextTheme(
-          bodyMedium: TextStyle(fontSize: 18, color: Colors.black87),
-          headlineSmall: TextStyle(fontWeight: FontWeight.bold, color: Colors.deepPurple),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.deepPurple,
-            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 12),
-            textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      theme: isDark ? ThemeData.dark() : ThemeData.light(),
+      home: Scaffold(
+        appBar: AppBar(title: Text("Combined Example")),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              MyText(),
+              SizedBox(height: 20),
+              MyButton(),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => setState(() => isDark = !isDark),
+                child: Text(
+                  isDark ? "Switch to Light Theme" : "Switch to Dark Theme",
+                ),
+              ),
+            ],
           ),
         ),
       ),
-      home: HomeScreen(),
     );
   }
 }
 
-class HomeScreen extends StatelessWidget {
+class MyText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Custom Widgets Example')),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CustomCardWidget(
-              title: "Custom Card Widget",
-              description: "This is a reusable custom widget for displaying text with a styled card.",
-            ),
-            SizedBox(height: 20),
-            CustomButtonWidget(
-              text: "Click Me",
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Custom Button Pressed!')),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+    return Text(
+      "Hello Flutter!",
+      style: TextStyle(fontSize: 24, color: Colors.blue),
     );
   }
 }
 
-// a) Custom Widget 1: Reusable Card
-class CustomCardWidget extends StatelessWidget {
-  final String title;
-  final String description;
-
-  const CustomCardWidget({required this.title, required this.description});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      color: Colors.deepPurple[50],
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: Theme.of(context).textTheme.headlineSmall),
-            SizedBox(height: 8),
-            Text(description, style: Theme.of(context).textTheme.bodyMedium),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// a) Custom Widget 2: Custom Button
-class CustomButtonWidget extends StatelessWidget {
-  final String text;
-  final VoidCallback onPressed;
-
-  const CustomButtonWidget({required this.text, required this.onPressed});
-
+class MyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: onPressed,
-      child: Text(text),
+      onPressed: () {},
+      child: Text("Click Me"),
     );
   }
 }
+
 77777777777
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MaterialApp(
+      home: CombinedForm(),
+      debugShowCheckedModeBanner: false,
+    ));
 
-class MyApp extends StatelessWidget {
+class CombinedForm extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Form Validation Example',
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.indigo, width: 2),
-          ),
-          labelStyle: TextStyle(color: Colors.indigo),
-        ),
-      ),
-      home: FormExample(),
-    );
-  }
+  State<CombinedForm> createState() => _CombinedFormState();
 }
 
-class FormExample extends StatefulWidget {
-  @override
-  State<FormExample> createState() => _FormExampleState();
-}
-
-class _FormExampleState extends State<FormExample> {
+class _CombinedFormState extends State<CombinedForm> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _ageController = TextEditingController();
-  String? _gender;
-
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Form submitted successfully!')),
-      );
-    }
-  }
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Form & Validation Example')),
+      appBar: AppBar(title: Text("Combined Form (7a + 7b)")),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: EdgeInsets.all(20),
         child: Form(
           key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Name Field
-                TextFormField(
-                  controller: _nameController,
-                  decoration: InputDecoration(labelText: 'Full Name'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your name';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 20),
-
-                // Email Field
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(labelText: 'Email Address'),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                      return 'Enter a valid email';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 20),
-
-                // Age Field
-                TextFormField(
-                  controller: _ageController,
-                  decoration: InputDecoration(labelText: 'Age'),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your age';
-                    }
-                    int? age = int.tryParse(value);
-                    if (age == null || age <= 0) {
-                      return 'Enter a valid age';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 20),
-
-                // Gender Dropdown
-                DropdownButtonFormField<String>(
-                  value: _gender,
-                  decoration: InputDecoration(labelText: 'Gender'),
-                  items: ['Male', 'Female', 'Other']
-                      .map((gender) => DropdownMenuItem(
-                            value: gender,
-                            child: Text(gender),
-                          ))
-                      .toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _gender = value;
-                    });
-                  },
-                  validator: (value) =>
-                      value == null ? 'Please select your gender' : null,
-                ),
-                SizedBox(height: 30),
-
-                // Submit Button
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  child: Text('Submit Form'),
-                ),
-              ],
-            ),
+          child: Column(
+            children: [
+              TextFormField(
+                controller: nameController,
+                decoration: InputDecoration(labelText: "Name"),
+                validator: (value) =>
+                    value!.isEmpty ? "Enter your name" : null,
+              ),
+              TextFormField(
+                controller: emailController,
+                decoration: InputDecoration(labelText: "Email"),
+                validator: (value) =>
+                    value!.contains("@") ? null : "Enter valid email",
+              ),
+              TextFormField(
+                controller: passController,
+                decoration: InputDecoration(labelText: "Password"),
+                obscureText: true,
+                validator: (value) =>
+                    value!.length < 6 ? "Min 6 characters" : null,
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    print("Name: ${nameController.text}");
+                    print("Email: ${emailController.text}");
+                    print("Password: ${passController.text}");
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Form Submitted")),
+                    );
+                  }
+                },
+                child: Text("Submit"),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 }
+
 88888888888
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
+void main() => runApp(MaterialApp(
+      home: CombinedAnimation(),
+      debugShowCheckedModeBanner: false,
+    ));
+class CombinedAnimation extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Animation Example',
-      theme: ThemeData(primarySwatch: Colors.teal),
-      home: AnimationExample(),
-    );
-  }
-}
-
-class AnimationExample extends StatefulWidget {
-  @override
-  _AnimationExampleState createState() => _AnimationExampleState();
-}
-
-class _AnimationExampleState extends State<AnimationExample>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _fadeAnimation;
-  late Animation<Offset> _slideAnimation;
-  bool _visible = true;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Animation Controller
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 2),
-    );
-
-    // Fade Animation
-    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    );
-
-    // Slide Animation
-    _slideAnimation = Tween<Offset>(
-      begin: Offset(0, 1),
-      end: Offset(0, 0),
-    ).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-
-    _controller.forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _toggleFade() {
-    setState(() {
-      _visible = !_visible;
-    });
-  }
-
-  @override
+  State<CombinedAnimation> createState() => _CombinedAnimationState();}
+class _CombinedAnimationState extends State<CombinedAnimation> {
+  double size = 100;
+  bool change = false;
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Animations Example')),
+      appBar: AppBar(title: Text("Combined Animation (8a + 8b)")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Fade Animation Example
-            AnimatedOpacity(
-              opacity: _visible ? 1.0 : 0.0,
+            AnimatedContainer(
+              width: size,
+              height: size,
               duration: Duration(seconds: 1),
-              child: Container(
-                width: 150,
-                height: 150,
-                color: Colors.teal,
-                child: Center(
-                  child: Text(
-                    'Fade Animation',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ),
+              color: Colors.blue, ),
             SizedBox(height: 20),
-
-            // Slide Animation Example
-            SlideTransition(
-              position: _slideAnimation,
-              child: Container(
-                width: 150,
-                height: 150,
-                color: Colors.orange,
-                child: Center(
-                  child: Text(
-                    'Slide Animation',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 40),
-
-            // Toggle Button
+            AnimatedOpacity(
+              opacity: change ? 0.2 : 1.0,
+              duration: Duration(seconds: 1),
+              child: Container(width: 100, height: 100, color: Colors.red),   ),
+            SizedBox(height: 20),
+            AnimatedContainer(
+              width: 100,
+              height: 100,
+              color: Colors.green,
+              duration: Duration(seconds: 1),
+              margin: EdgeInsets.only(left: change ? 120 : 0),),
+            SizedBox(height: 25),
             ElevatedButton(
-              onPressed: _toggleFade,
-              child: Text(_visible ? 'Fade Out' : 'Fade In'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-9999999999
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Fetch Data Example',
-      theme: ThemeData(primarySwatch: Colors.indigo),
-      home: FetchDataScreen(),
-    );
-  }
-}
-
-class FetchDataScreen extends StatefulWidget {
-  @override
-  _FetchDataScreenState createState() => _FetchDataScreenState();
-}
-
-class _FetchDataScreenState extends State<FetchDataScreen> {
-  List<dynamic> users = [];
-  bool isLoading = true;
-
-  // a) Fetch Data from REST API
-  Future<void> fetchData() async {
-    final response =
-        await http.get(Uri.parse('https://jsonplaceholder.typicode.com/users'));
-    if (response.statusCode == 200) {
-      setState(() {
-        users = json.decode(response.body);
-        isLoading = false;
-      });
-    } else {
-      throw Exception('Failed to load data');
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    fetchData();
-  }
-
-  // b) Display Data in UI
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Fetch Data from REST API')),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: users.length,
-              itemBuilder: (context, index) {
-                var user = users[index];
-                return Card(
-                  elevation: 5,
-                  margin: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.indigo,
-                      child: Text(
-                        user['name'][0],
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    title: Text(user['name'],
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16)),
-                    subtitle: Text(
-                        'Email: ${user['email']}\nPhone: ${user['phone']}'),
-                    isThreeLine: true,
-                  ),
-                );
-              },
-            ),
-    );
-  }
-}
-101010
-// ===========================
-// main.dart
-// ===========================
-
+              onPressed: () {
+                setState(() {
+                  size = size == 100 ? 200 : 100;
+                  change = !change;
+                });  },
+              child: Text("Animate"), ), ], ), ),);}}
+99999999
+10101010
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MaterialApp(home: MyHome()));
 
-class MyApp extends StatelessWidget {
+class MyHome extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Unit Test & Debug Example',
-      theme: ThemeData(primarySwatch: Colors.purple),
-      home: CounterScreen(),
-    );
-  }
+  State<MyHome> createState() => _MyHomeState();
 }
 
-class CounterScreen extends StatefulWidget {
-  @override
-  State<CounterScreen> createState() => _CounterScreenState();
-}
+class _MyHomeState extends State<MyHome> {
+  String message = "No message yet";
 
-class _CounterScreenState extends State<CounterScreen> {
-  int count = 0;
-
-  void incrementCounter() {
-    setState(() {
-      count++;
-    });
-  }
-
-  void resetCounter() {
-    setState(() {
-      count = 0;
-    });
+  void showMessage() {
+    setState(() => message = "Hello Debugger!");
+    debugPrint("Message updated: $message");
   }
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("Building Widget... $message");
     return Scaffold(
-      appBar: AppBar(title: Text('Unit Test Example')),
+      appBar: AppBar(title: Text("Unit Test & Debug Example")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Counter Value:', style: TextStyle(fontSize: 20)),
-            Text(
-              '$count',
-              key: Key('counterText'),
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+            ElevatedButton(
+              key: Key("myButton"),
+              onPressed: () {},
+              child: Text("Test Button"),
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              key: Key('incrementButton'),
-              onPressed: incrementCounter,
-              child: Text('Increment'),
-            ),
+            Text(message, style: TextStyle(fontSize: 20)),
             SizedBox(height: 10),
             ElevatedButton(
-              key: Key('resetButton'),
-              onPressed: resetCounter,
-              child: Text('Reset'),
+              onPressed: showMessage,
+              child: Text("Show Message"),
             ),
           ],
         ),
@@ -819,55 +524,4 @@ class _CounterScreenState extends State<CounterScreen> {
     );
   }
 }
-
-// ===========================
-// test/widget_test.dart
-// ===========================
-
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_application/main.dart'; // replace with your project name
-
-void main() {
-  testWidgets('Counter increments and resets correctly', (WidgetTester tester) async {
-    await tester.pumpWidget(MyApp());
-
-    // Verify initial counter value
-    expect(find.text('0'), findsOneWidget);
-
-    // Tap the Increment button
-    await tester.tap(find.byKey(Key('incrementButton')));
-    await tester.pump();
-
-    // Verify counter increment
-    expect(find.text('1'), findsOneWidget);
-
-    // Tap the Reset button
-    await tester.tap(find.byKey(Key('resetButton')));
-    await tester.pump();
-
-    // Verify counter reset
-    expect(find.text('0'), findsOneWidget);
-  });
-}
-
-/*
-b) Debugging Tools in Flutter:
----------------------------------
-1️⃣ **Flutter DevTools**
-   - Run `flutter pub global activate devtools`
-   - Then `flutter run` and open the link from console to inspect widget tree, performance, and memory.
-
-2️⃣ **Hot Reload / Hot Restart**
-   - Use in VSCode or Android Studio to instantly view UI changes.
-
-3️⃣ **Debug Console & Logs**
-   - Use `print()` or `debugPrint()` to track variable states.
-
-4️⃣ **Breakpoints**
-   - Place breakpoints to pause execution and inspect variable values.
-
-5️⃣ **Widget Inspector**
-   - Press `Ctrl + Shift + I` in VSCode to visualize widget hierarchy and layout issues.
-*/
 
